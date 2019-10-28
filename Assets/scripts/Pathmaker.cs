@@ -10,7 +10,8 @@ using UnityEngine.SceneManagement;
 // STEP 1: ======================================================================================
 // put this script on a Sphere... it will move around, and drop a path of floor tiles behind it
 
-public class Pathmaker : MonoBehaviour {
+public class Pathmaker : MonoBehaviour
+{
 
     // STEP 2: ============================================================================================
     // translate the pseudocode below
@@ -24,14 +25,23 @@ public class Pathmaker : MonoBehaviour {
 
     private int counter = 0;
 
-    public Transform floorPrebaf;
+    public Transform ground;
+    public Transform grass;
+    public Transform water;
     public Transform pathmakerSpherePrefab;
 
-    public Renderer floorRend;
+    public static List<Transform> floorlist = new List<Transform>();
 
-    void Update () {
+    public static Vector3 totalV3;
+    public static Vector3 center;
 
-        
+    public static Vector3 camPos;
+    
+
+    void Update()
+    {
+
+
 
         //		If counter is less than 50, then:
         //			Generate a random number from 0.0f to 1.0f;
@@ -46,12 +56,13 @@ public class Pathmaker : MonoBehaviour {
         //		Else:
         //			Destroy my game object; 		// self destruct if I've made enough tiles already
 
-        if (counter < 50)
+        if (counter < 50 && globalFloorCount < 500)
         {
             float randomNum = Random.Range(0f, 1f);
-            if(randomNum < 0.25f)
+            if (randomNum < 0.25f)
             {
-               this.transform.Rotate(0f, 90f, 0f);
+                this.transform.Rotate(0f, 90f, 0f);
+
             }
 
             else if (randomNum >= 0.25f && randomNum <= 0.5f)
@@ -60,12 +71,31 @@ public class Pathmaker : MonoBehaviour {
 
             }
 
-            else if(randomNum >= 0.98f && randomNum <= 1f)
+            else if (randomNum >= 0.99f && randomNum <= 1f)
             {
-                Instantiate(pathmakerSpherePrefab, this.transform.position,this.transform.rotation);
+                Instantiate(pathmakerSpherePrefab, this.transform.position, this.transform.rotation);
             }
 
-            Instantiate(floorPrebaf, this.transform.position, this.transform.rotation);
+
+            float newRandNum = Random.Range(0f, 100f);
+            if (newRandNum <= 10f)
+            {
+                Transform watergo = Instantiate(water, this.transform.position, this.transform.rotation);
+                floorlist.Add(watergo);
+            }
+
+            else if (newRandNum > 10 && newRandNum < 30)
+            {
+                Transform grassgo = Instantiate(grass, this.transform.position, this.transform.rotation);
+                floorlist.Add(grassgo);
+            }
+
+            else
+            {
+                Transform groundgo = Instantiate(ground, this.transform.position, this.transform.rotation);
+                floorlist.Add(groundgo);
+            }
+
             this.transform.position = this.transform.forward * 5 + this.transform.position;
             counter++;
             globalFloorCount++;
@@ -75,14 +105,26 @@ public class Pathmaker : MonoBehaviour {
             Destroy(this.gameObject);
         }
 
-        if(globalFloorCount >= 500)
+        if (floorlist.Count < 501)
         {
-            Destroy(gameObject);
+            totalV3 = new Vector3(0, 0, 0);
+            foreach (Transform a in floorlist)
+            {
+                totalV3 += a.position;
+                center = totalV3 / floorlist.Count;
+            }
+
+        }
+        foreach (Transform a in Pathmaker.floorlist)
+        {
+            if (!a.GetComponent<Renderer>().isVisible)
+            {
+                camPos = new Vector3(Pathmaker.center.x, Reload.camheight += 0.4f, Pathmaker.center.z);
+
+            }
         }
 
-
-	}
-
+    }
 } // end of class scope
 
 // MORE STEPS BELOW!!!........

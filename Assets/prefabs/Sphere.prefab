@@ -92,9 +92,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5575b50532c45f4984a0392f98e35f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorPrebaf: {fileID: 4113209856346078, guid: 65a6189e1bac1f549afc3dc95369929d,
-    type: 3}
+  ground: {fileID: 4977896108015463990, guid: 8a1b5ee45df133d419d3b1a388a70063, type: 3}
+  grass: {fileID: 7427395254239781709, guid: 59ce27b2d8decdf41927540386053b75, type: 3}
+  water: {fileID: 443564053484784865, guid: a370a6503f079ab4784dff1502d10042, type: 3}
   pathmakerSpherePrefab: {fileID: 7769859833980444480}
+  floorlist: []
 --- !u!135 &8513040719540670523
 SphereCollider:
   m_ObjectHideFlags: 0
